@@ -1,0 +1,1 @@
+"""Top-level hbnb package."""
