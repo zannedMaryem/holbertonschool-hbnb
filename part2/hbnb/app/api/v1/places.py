@@ -45,12 +45,7 @@ class PlaceList(Resource):
             'price': new_place.price,
             'latitude': new_place.latitude,
             'longitude': new_place.longitude,
-            'owner': {
-                'id': new_place.owner.id,
-                'first_name': new_place.owner.first_name,
-                'last_name': new_place.owner.last_name,
-                'email': new_place.owner.email
-            },
+            'owner_id': new_place.owner.id,
             'description': new_place.description
         }, 201
 

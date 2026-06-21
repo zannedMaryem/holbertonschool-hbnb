@@ -28,7 +28,9 @@ class HBnBFacade:
 
     def update_user(self, user_id, user_data):
         user = self.get_user(user_id)
-        return self.user_repo.update(user, user_data)
+        if not user:
+            return None
+        return self.user_repo.update(user_id, user_data)
 # Place CRUD
     """def create_place(self, place_data):
         place = Place(**place_data)
@@ -67,7 +69,7 @@ class HBnBFacade:
         place = self.get_place(place_id)
         if not place:
             return None
-        return self.place_repo.update(place, place_data)
+        return self.place_repo.update(place_id, place_data)
 
 # Amenity CRUD
     def create_amenity(self, amenity_data):
@@ -86,7 +88,9 @@ class HBnBFacade:
 
     def update_amenity(self, amenity_id, amenity_data):
         amenity = self.get_amenity(amenity_id)
-        return self.amenity_repo.update(amenity, amenity_data)
+        if not amenity:
+            return None
+        return self.amenity_repo.update(amenity_id, amenity_data)
 
 # Review CRUD
     def create_review(self, review_data):
@@ -129,7 +133,7 @@ class HBnBFacade:
         review = self.review_repo.get(review_id)
         if not review:
             return None
-        return self.review_repo.update(review, review_data)
+        return self.review_repo.update(review_id, review_data)
 
     def delete_review(self, review_id):
         return self.review_repo.delete(review_id)

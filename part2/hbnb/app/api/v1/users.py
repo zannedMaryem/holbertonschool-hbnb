@@ -64,7 +64,7 @@ class UserResource(Resource):
             'last_name': user.last_name,
             'email': user.email
             }, 200
-    @api.expect(user_model, validate=True)
+    @api.expect(user_model)
     @api.response(200, 'User details updated successfully')
     @api.response(400, 'Invalid input data')
     @api.response(404, 'User not found')
