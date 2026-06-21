@@ -1,5 +1,5 @@
 from flask_restx import Namespace, Resource, fields
-from app.services import facade
+from hbnb.app.services import facade
 
 api = Namespace('reviews', description='Review operations')
 
@@ -19,10 +19,12 @@ class ReviewList(Resource):
     def post(self):
         """Register a new review"""
         review_data = api.payload
+        if not review_data:
+            return{'error': 'Invalid input data'}
         try:
             new_review = facade.create_review(review_data)
         except ValueError as e:
-            return {'error: Invalid input data': str(e)}, 400
+            return {'error': str(e)}, 400
         return{
             'id': new_review.id,
             'text': new_review.text,
@@ -40,8 +42,6 @@ class ReviewList(Resource):
             'id': review.id,
             'text': review.text,
             'rating': review.rating,
-            'user_id': review.user.id,
-            'place_id': review.place.id 
             } for review in reviews_list
         ], 200
 
@@ -71,16 +71,13 @@ class ReviewResource(Resource):
         review_data = api.payload
         if not review_data:
             return{'error': 'Invalid input data'}, 400
-        review = facade.update_review(review_id, review_data)
+        try:
+            review = facade.update_review(review_id, review_data)
+        except ValueError as e:
+            return{'error': str(e)}, 400
         if not review:
             return{'error': 'Review not found'}, 404
-        return{
-            'id': review.id,
-            'text': review.text,
-            'rating': review.rating,
-            'user_id': review.user.id,
-            'place_id': review.place.id 
-        }, 200
+        return{'message': 'Review updated successfully'}, 200
 
     @api.response(200, 'Review deleted successfully')
     @api.response(404, 'Review not found')

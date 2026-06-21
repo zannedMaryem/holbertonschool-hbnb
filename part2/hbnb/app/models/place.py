@@ -21,8 +21,12 @@ class Place(BaseModel):
     @title.setter
     def title(self, title):
         # title must be a string and under 100 charachters
-        if not isinstance(title, str) or len(title) > 100:
+        if not isinstance(title, str):
+            raise ValueError("The title must be a string")
+        if len(title) > 100:
             raise ValueError("The title must be under 100 charachters")
+        if not title.strip():
+            raise ValueError("Title cannot be empty")
         self._title = title
     
     @property

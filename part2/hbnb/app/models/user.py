@@ -18,8 +18,12 @@ class User(BaseModel):
     
     @first_name.setter
     def first_name(self, first_name):
-        if not isinstance(first_name, str) or len(first_name) > 50:
-            raise ValueError("First name must be a string and less than 50 chararchters")
+        if not isinstance(first_name, str):
+            raise ValueError("First name must be a string")
+        if len(first_name) > 50:
+            raise ValueError("First name must be less than 50 charachters")
+        if not first_name.strip():
+            raise ValueError("First name cannot be empty")
         self._first_name = first_name
     
     @property
@@ -28,8 +32,12 @@ class User(BaseModel):
     
     @last_name.setter
     def last_name(self, last_name):
-        if not isinstance(last_name, str) or len(last_name) > 50:
-            raise ValueError("Last name must be a string and less than 50 chararchters")
+        if not isinstance(last_name, str):
+            raise ValueError("Last name must be a string")
+        if len(last_name) > 50:
+            raise ValueError("Last name must be less than 50 charachters")
+        if not last_name.strip():
+            raise ValueError("Last name cannot be empty")
         self._last_name = last_name
     
     @property
