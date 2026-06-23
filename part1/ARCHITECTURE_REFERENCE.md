@@ -116,7 +116,7 @@ DELETE /amenities/<id>      → Delete amenity
 ### User Validation
 
 | Rule | Type | Requirement |
-|------|------|-------------|
+| ------ | ------ | ------------- |
 | first_name | Required | Non-empty string, max 50 chars |
 | last_name | Required | Non-empty string, max 50 chars |
 | email | Required | Valid email format, unique |
@@ -126,7 +126,7 @@ DELETE /amenities/<id>      → Delete amenity
 ### Place Validation
 
 | Rule | Type | Requirement |
-|------|------|-------------|
+| ------ | ------ | ------------- |
 | title | Required | Non-empty string, max 128 chars |
 | description | Optional | Max 2000 chars |
 | price | Required | Positive number, max 2 decimals |
@@ -138,7 +138,7 @@ DELETE /amenities/<id>      → Delete amenity
 ### Review Validation
 
 | Rule | Type | Requirement |
-|------|------|-------------|
+| ------ | ------ | ------------- |
 | place_id | Required | Valid place ID |
 | user_id | Required | Valid user ID |
 | rating | Required | Integer 1-5 |
