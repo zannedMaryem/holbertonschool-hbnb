@@ -1,0 +1,136 @@
+<mxfile host="65bd71144e">
+    <diagram id="class-diagram" name="Class Diagram">
+        <mxGraphModel dx="2338" dy="1680" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1200" background="none" math="0" shadow="1">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="baseentity" value="BaseEntity" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;rounded=1;fillColor=#e0e0e0;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="575" y="10" width="200" height="140" as="geometry"/>
+                </mxCell>
+                <mxCell id="be-attr" value="- id: UUID&#xa;- created_at: DateTime&#xa;- updated_at: DateTime" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fontSize=11;" parent="baseentity" vertex="1">
+                    <mxGeometry y="26" width="200" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="be-sep" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" parent="baseentity" vertex="1">
+                    <mxGeometry y="86" width="200" height="8" as="geometry"/>
+                </mxCell>
+                <mxCell id="be-method" value="+ get_id(): UUID&#xa;+ to_dict(): dict&#xa;+ update(): void" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fontSize=11;" parent="baseentity" vertex="1">
+                    <mxGeometry y="94" width="200" height="46" as="geometry"/>
+                </mxCell>
+                <mxCell id="user" value="User" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;rounded=1;fillColor=#c8e6c9;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="-20" y="-10" width="220" height="180" as="geometry"/>
+                </mxCell>
+                <mxCell id="user-attr" value="- first_name: String&lt;br&gt;- last_name: String&lt;br&gt;- email: String&lt;br&gt;- is_admin: Boolean" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fontSize=10;" parent="user" vertex="1">
+                    <mxGeometry y="26" width="220" height="80" as="geometry"/>
+                </mxCell>
+                <mxCell id="user-sep" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" parent="user" vertex="1">
+                    <mxGeometry y="106" width="220" height="8" as="geometry"/>
+                </mxCell>
+                <mxCell id="user-method" value="+ register(): Boolean&#xa;+ update_profile(data): Boolean&#xa;+ validate_email(): Boolean&#xa;+ get_places(): List&#xa;+ get_reviews(): List" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fontSize=10;" parent="user" vertex="1">
+                    <mxGeometry y="114" width="220" height="66" as="geometry"/>
+                </mxCell>
+                <mxCell id="place" value="Place" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;rounded=1;fillColor=#bbdefb;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="220" y="160" width="230" height="200" as="geometry"/>
+                </mxCell>
+                <mxCell id="place-attr" value="- title: String&#xa;- description: String&#xa;- price: Float&#xa;- latitude: Float&#xa;- longitude: Float&#xa;- owner: User&#xa;- amenities: List" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fontSize=10;" parent="place" vertex="1">
+                    <mxGeometry y="26" width="230" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="place-sep" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" parent="place" vertex="1">
+                    <mxGeometry y="126" width="230" height="8" as="geometry"/>
+                </mxCell>
+                <mxCell id="place-method" value="+ create(): Boolean&#xa;+ update(data): Boolean&#xa;+ add_amenity(amenity): void&#xa;+ remove_amenity(amenity): void&#xa;+ get_reviews(): List" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fontSize=10;" parent="place" vertex="1">
+                    <mxGeometry y="134" width="230" height="66" as="geometry"/>
+                </mxCell>
+                <mxCell id="review" value="Review" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;rounded=1;fillColor=#ffe0b2;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="1120" width="220" height="160" as="geometry"/>
+                </mxCell>
+                <mxCell id="review-attr" value="- place: Place&#xa;- user: User&#xa;- rating: Integer&#xa;- comment: String" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fontSize=10;" parent="review" vertex="1">
+                    <mxGeometry y="26" width="220" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="review-sep" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" parent="review" vertex="1">
+                    <mxGeometry y="86" width="220" height="8" as="geometry"/>
+                </mxCell>
+                <mxCell id="review-method" value="+ create(): Boolean&#xa;+ update(data): Boolean&#xa;+ validate_rating(): Boolean&#xa;+ delete(): void" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fontSize=10;" parent="review" vertex="1">
+                    <mxGeometry y="94" width="220" height="66" as="geometry"/>
+                </mxCell>
+                <mxCell id="amenity" value="Amenity" style="swimlane;fontStyle=1;align=center;verticalAlign=top;childLayout=stackLayout;horizontal=1;startSize=26;horizontalStack=0;resizeParent=1;resizeParentMax=0;resizeLast=0;collapsible=1;marginBottom=0;html=1;rounded=1;fillColor=#f8bbd0;strokeWidth=2;" parent="1" vertex="1">
+                    <mxGeometry x="890" y="170" width="200" height="140" as="geometry"/>
+                </mxCell>
+                <mxCell id="amenity-attr" value="- name: String" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fontSize=10;" parent="amenity" vertex="1">
+                    <mxGeometry y="26" width="200" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="amenity-sep" value="" style="line;strokeWidth=1;fillColor=none;align=left;verticalAlign=middle;spacingTop=-1;spacingLeft=3;spacingRight=3;rotatable=0;labelPosition=right;points=[];portConstraint=eastwest;strokeColor=inherit;" parent="amenity" vertex="1">
+                    <mxGeometry y="66" width="200" height="8" as="geometry"/>
+                </mxCell>
+                <mxCell id="amenity-method" value="+ create(): Boolean&#xa;+ update(data): Boolean&#xa;+ delete(): void" style="text;strokeColor=none;fillColor=none;align=left;verticalAlign=top;spacingLeft=4;spacingRight=4;overflow=hidden;rotatable=0;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;whiteSpace=wrap;html=1;fontSize=10;" parent="amenity" vertex="1">
+                    <mxGeometry y="74" width="200" height="66" as="geometry"/>
+                </mxCell>
+                <mxCell id="inheritance-user" style="edgeStyle=elbowEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=0;dashPattern=1 4;strokeWidth=2;endArrow=block;endFill=0;startArrow=none;startFill=0;" parent="1" source="user" target="baseentity" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="inheritance-place" style="edgeStyle=elbowEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=0;dashPattern=1 4;strokeWidth=2;endArrow=block;endFill=0;startArrow=none;startFill=0;" parent="1" source="place" target="baseentity" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="inheritance-review" style="edgeStyle=elbowEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=0;dashPattern=1 4;strokeWidth=2;endArrow=block;endFill=0;startArrow=none;startFill=0;" parent="1" source="review" target="baseentity" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="inheritance-amenity" style="edgeStyle=elbowEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;dashed=0;dashPattern=1 4;strokeWidth=2;endArrow=block;endFill=0;startArrow=none;startFill=0;" parent="1" source="amenity" target="baseentity" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="label-user-place" value="owns&#xa;1..*" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="360" y="355" width="50" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="assoc-user-review" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=open;endFill=0;startArrow=none;startFill=0;" parent="1" source="user" target="review" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="320" y="410"/>
+                            <mxPoint x="850" y="410"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="label-user-review" value="writes&#xa;1..*" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="575" y="405" width="50" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="assoc-place-review" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=open;endFill=0;startArrow=none;startFill=0;" parent="1" source="place" target="review" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="680" y="390"/>
+                            <mxPoint x="780" y="390"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="label-place-review" value="receives&#xa;1..*" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="715" y="360" width="60" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="assoc-place-amenity" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;endArrow=open;endFill=0;startArrow=none;startFill=0;" parent="1" source="place" target="amenity" edge="1">
+                    <mxGeometry relative="1" as="geometry">
+                        <Array as="points">
+                            <mxPoint x="680" y="350"/>
+                            <mxPoint x="1150" y="350"/>
+                        </Array>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="label-place-amenity" value="has&#xa;0..*" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="900" y="325" width="50" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="legend-title" value="Legend" style="text;html=1;align=left;verticalAlign=top;fontSize=14;fontStyle=1;fontColor=#333;" parent="1" vertex="1">
+                    <mxGeometry x="100" y="650" width="100" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="legend-inherit" value="— — — ▸  Inheritance" style="text;html=1;align=left;verticalAlign=top;fontSize=11;" parent="1" vertex="1">
+                    <mxGeometry x="100" y="680" width="150" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="legend-assoc" value="—— ▸  Association" style="text;html=1;align=left;verticalAlign=top;fontSize=11;" parent="1" vertex="1">
+                    <mxGeometry x="100" y="710" width="150" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="legend-cardinality" value="1..*  = One to Many&#xa;0..*  = Zero to Many&#xa;1     = One" style="text;html=1;align=left;verticalAlign=top;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="100" y="740" width="200" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="details-title" value="Key Methods Summary" style="text;html=1;align=left;verticalAlign=top;fontSize=12;fontStyle=1;fontColor=#333;" parent="1" vertex="1">
+                    <mxGeometry x="730" y="550" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="details" value="BaseEntity provides common functionality:&#xa;- Unique identification (UUID)&#xa;- Timestamps (created_at, updated_at)&#xa;- Serialization (to_dict)&#xa;&#xa;Each model extends BaseEntity and adds:&#xa;- Domain-specific attributes&#xa;- Validation methods&#xa;- CRUD operations&#xa;- Relationship management" style="text;html=1;align=left;verticalAlign=top;fontSize=10;fillColor=#f5f5f5;strokeWidth=1;rounded=1;padding=10;" parent="1" vertex="1">
+                    <mxGeometry x="730" y="590" width="350" height="130" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

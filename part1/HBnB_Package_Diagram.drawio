@@ -1,0 +1,94 @@
+<mxfile host="65bd71144e">
+    <diagram id="package-diagram" name="Package Diagram">
+        <mxGraphModel dx="738" dy="480" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="1000" background="none" math="0" shadow="1">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="presentation" value="" style="shape=folder;fontStyle=1;spacingTop=10;tabWidth=140;tabHeight=25;tabPosition=left;html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=2;fillColor=#e1f5ff;strokeColor=#0277bd;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="35" width="350" height="220" as="geometry"/>
+                </mxCell>
+                <mxCell id="api" value="API Endpoints&lt;br&gt;- POST /users&lt;br&gt;- GET /places&lt;br&gt;- DELETE /reviews&lt;br&gt;- PUT /amenities" style="shape=box;html=1;rounded=1;fillColor=#b3e5fc;strokeColor=#01579b;strokeWidth=2;fontSize=11;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="100" width="140" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="services" value="Services&lt;br&gt;- UserService&lt;br&gt;- PlaceService&lt;br&gt;- ReviewService&lt;div style=&quot;&quot;&gt;-&lt;font style=&quot;color: rgb(0, 0, 0);&quot;&gt;AmenityService&lt;/font&gt;&lt;/div&gt;" style="shape=box;html=1;rounded=1;fillColor=#b3e5fc;strokeColor=#01579b;strokeWidth=2;fontSize=11;" parent="1" vertex="1">
+                    <mxGeometry x="240" y="100" width="110" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="facade" value="" style="shape=folder;fontStyle=1;spacingTop=10;tabWidth=110;tabHeight=30;tabPosition=left;html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=2;fillColor=#fff9c4;strokeColor=#f57f17;" parent="1" vertex="1">
+                    <mxGeometry x="55" y="310" width="320" height="140" as="geometry"/>
+                </mxCell>
+                <mxCell id="facade-int" value="Facade Interface&#xa;- register_user()&#xa;- create_place()&#xa;- submit_review()&#xa;- get_places_list()" style="shape=box;html=1;rounded=1;fillColor=#fff59d;strokeColor=#f57f17;strokeWidth=2;fontSize=11;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="350" width="220" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="business" value="Business Logic Layer" style="shape=folder;fontStyle=1;spacingTop=10;tabWidth=140;tabHeight=30;tabPosition=left;html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=2;fillColor=#f3e5f5;strokeColor=#6a1b9a;" parent="1" vertex="1">
+                    <mxGeometry x="50" y="500" width="560" height="200" as="geometry"/>
+                </mxCell>
+                <mxCell id="user-model" value="User Model&#xa;- register()&#xa;- update_profile()&#xa;- validate_email()&#xa;- delete()" style="shape=box;html=1;rounded=1;fillColor=#e1bee7;strokeColor=#6a1b9a;strokeWidth=2;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="70" y="560" width="120" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="place-model" value="Place Model&#xa;- create()&#xa;- add_amenity()&#xa;- get_reviews()&#xa;- delete()" style="shape=box;html=1;rounded=1;fillColor=#e1bee7;strokeColor=#6a1b9a;strokeWidth=2;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="220" y="560" width="120" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="review-model" value="Review Model&#xa;- create()&#xa;- validate_rating()&#xa;- update()&#xa;- delete()" style="shape=box;html=1;rounded=1;fillColor=#e1bee7;strokeColor=#6a1b9a;strokeWidth=2;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="360" y="560" width="120" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="amenity-model" value="Amenity Model&#xa;- create()&#xa;- update()&#xa;- delete()&#xa;- list_all()" style="shape=box;html=1;rounded=1;fillColor=#e1bee7;strokeColor=#6a1b9a;strokeWidth=2;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="500" y="560" width="100" height="90" as="geometry"/>
+                </mxCell>
+                <mxCell id="persistence" value="" style="shape=folder;fontStyle=1;spacingTop=10;tabWidth=120;tabHeight=30;tabPosition=left;html=1;rounded=0;shadow=0;comic=0;labelBackgroundColor=none;strokeWidth=2;fillColor=#e8f5e9;strokeColor=#1b5e20;" parent="1" vertex="1">
+                    <mxGeometry x="50" y="750" width="320" height="150" as="geometry"/>
+                </mxCell>
+                <mxCell id="database" value="Database&#xa;- Users Table&#xa;- Places Table&#xa;- Reviews Table&#xa;- Amenities Table" style="shape=cylinder;html=1;boundedLbl=1;backgroundOutline=1;rounded=1;fillColor=#c8e6c9;strokeColor=#1b5e20;strokeWidth=2;fontSize=11;" parent="1" vertex="1">
+                    <mxGeometry x="110" y="790" width="180" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="edge1" value="" style="endArrow=open;html=1;rounded=0;strokeWidth=2;strokeColor=#555;" parent="1" source="api" target="facade-int" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="edge2" value="" style="endArrow=open;html=1;rounded=0;strokeWidth=2;strokeColor=#555;" parent="1" source="services" target="facade-int" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="edge3" value="" style="endArrow=open;html=1;rounded=0;strokeWidth=2;strokeColor=#555;" parent="1" source="facade-int" target="user-model" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="edge4" value="" style="endArrow=open;html=1;rounded=0;strokeWidth=2;strokeColor=#555;" parent="1" source="facade-int" target="place-model" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="edge5" value="" style="endArrow=open;html=1;rounded=0;strokeWidth=2;strokeColor=#555;" parent="1" source="facade-int" target="review-model" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="edge6" value="" style="endArrow=open;html=1;rounded=0;strokeWidth=2;strokeColor=#555;" parent="1" source="facade-int" target="amenity-model" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="edge7" value="" style="endArrow=open;html=1;rounded=0;strokeWidth=2;strokeColor=#555;" parent="1" source="user-model" target="database" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="edge8" value="" style="endArrow=open;html=1;rounded=0;strokeWidth=2;strokeColor=#555;" parent="1" source="place-model" target="database" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="edge9" value="" style="endArrow=open;html=1;rounded=0;strokeWidth=2;strokeColor=#555;" parent="1" source="review-model" target="database" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="edge10" value="" style="endArrow=open;html=1;rounded=0;strokeWidth=2;strokeColor=#555;" parent="1" source="amenity-model" target="database" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="legend" value="Interaction Flow:" style="text;html=1;align=left;verticalAlign=top;fontSize=12;fontStyle=1;" parent="1" vertex="1">
+                    <mxGeometry x="450" y="50" width="100" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="legend-text" value="1. Presentation Layer receives API requests&#xa;2. Routes through Facade Interface&#xa;3. Facade delegates to Models&#xa;4. Models interact with Database&#xa;5. Response bubbles back through layers" style="text;html=1;align=left;verticalAlign=top;fontSize=10;" parent="1" vertex="1">
+                    <mxGeometry x="450" y="80" width="250" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="3" value="&lt;b&gt;Presentation Layer&lt;/b&gt;" style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="50" y="40" width="120" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="4" value="&lt;b&gt;Facade Layer&lt;/b&gt;" style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="65" y="310" width="90" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="5" value="&lt;span style=&quot;color: rgb(0, 0, 0); font-weight: 700; white-space: nowrap;&quot;&gt;Business Logic Layer&lt;/span&gt;" style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="90" y="500" width="60" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="6" value="&lt;span style=&quot;color: rgb(0, 0, 0); font-weight: 700; white-space: nowrap;&quot;&gt;Persistence Layer&lt;/span&gt;" style="text;strokeColor=none;align=center;fillColor=none;html=1;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="750" width="60" height="30" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
