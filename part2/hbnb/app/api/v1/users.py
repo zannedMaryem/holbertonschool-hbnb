@@ -1,4 +1,5 @@
 from flask_restx import Namespace, Resource, fields
+from email_validator import validate_email, EmailNotValidError
 from hbnb.app.services import facade
 
 api = Namespace('users', description='User operations')
@@ -93,9 +94,14 @@ class UserResource(Resource):
 @api.route('/email/<email>')
 class UserEmail(Resource):
     @api.response(200, 'User email retreived successfully')
+    @api.response(400, 'Invalid input data')
     @api.response(404, 'User email not found')
     def get(self, email):
         """Get user by email adress"""
+        try:
+            validate_email(email, allow_smtputf8= True, check_deliverability=True)
+        except EmailNotValidError as e: 
+            return{'error': str(e)}, 400
         user = facade.get_user_by_email(email)
         if not user:
             return {'error': 'User not found'}, 404

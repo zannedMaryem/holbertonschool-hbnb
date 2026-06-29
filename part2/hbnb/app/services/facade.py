@@ -32,24 +32,18 @@ class HBnBFacade:
             return None
         return self.user_repo.update(user_id, user_data)
 # Place CRUD
-    """def create_place(self, place_data):
-        place = Place(**place_data)
-        self.place_repo.add(place)
-        return place"""
     def create_place(self, place_data):
-    # Extract the owner data from the payload
-        owner_data = place_data.pop('owner')
+        # Convert owner_id from the API payload into an actual User instance
+        owner_id = place_data.pop('owner_id', None)
+        if not owner_id:
+            raise ValueError("Missing owner_id")
 
-    # Fetch the existing user from the repository using their ID
-        owner_id = owner_data.get('id')
         owner = self.user_repo.get(owner_id)
-
-    # Validate that the owner exists
         if not owner:
             raise ValueError(f"User with ID {owner_id} not found")
 
-    # Create the Place instance with the resolved User object
-        place = Place(owner=owner, **place_data)
+        place_data['owner'] = owner
+        place = Place(**place_data)
         self.place_repo.add(place)
         return place
 
@@ -60,12 +54,14 @@ class HBnBFacade:
         return self.place_repo.get_all()
     
     def update_place(self, place_id, place_data):
-        owner_data = place_data.pop('owner')
-        owner_id = owner_data.get('id')
-        owner = self.user_repo.get(owner_id)
-        if not owner:
-            raise ValueError(f"User with ID {owner_id} not found")
-        place_data['owner'] = owner
+        owner_id = place_data.pop('owner_id', None)
+        if owner_id is not None:
+            owner = self.user_repo.get(owner_id)
+            if not owner:
+                raise ValueError(f"User with ID {owner_id} not found")
+            # If owner_id is provided in update payload, resolve it to a User instance
+            place_data['owner'] = owner
+
         place = self.get_place(place_id)
         if not place:
             return None
@@ -83,8 +79,21 @@ class HBnBFacade:
     def get_all_amenities(self):
         return self.amenity_repo.get_all()
     
+    def add_amenity_to_place(self, place_id, amenity_id):
+        place = self.place_repo.get(place_id)
+        if not place:
+            raise ValueError("Place not found")
+        amenity = self.amenity_repo.get(amenity_id)
+        if not amenity:
+            raise ValueError("Amenity not found")
+        place.add_amenity(amenity)
+    
     def get_amenities_by_place(self, place_id):
-        return self.amenity_repo.get_by_attribute('place', self.place_repo.get(place_id))
+        place = self.place_repo.get(place_id)
+        if not place:
+            raise ValueError("Place not foun")
+        
+        return [amenity for amenity in self.amenity_repo.get_all() if place in amenity.places]
 
     def update_amenity(self, amenity_id, amenity_data):
         amenity = self.get_amenity(amenity_id)
@@ -127,12 +136,35 @@ class HBnBFacade:
         return self.review_repo.get_all()
 
     def get_reviews_by_place(self, place_id):
-        return self.review_repo.get_by_attribute('place', self.place_repo.get(place_id))
+        place = self.place_repo.get(place_id)
+        if not place:
+            return []
+        return [review for review in self.review_repo.get_all() if review.place == place]
 
     def update_review(self, review_id, review_data):
+        # Check review exists
         review = self.review_repo.get(review_id)
         if not review:
             return None
+
+        # Resolve user_id to User instance
+        user_id = review_data.pop('user_id', None)
+        if user_id is not None:
+            user = self.user_repo.get(user_id)
+            if not user:
+                raise ValueError(f"User with ID {user_id} not found")
+            review_data['user'] = user
+
+        # Resolve place_id to Place instance
+        place_id = review_data.pop('place_id', None)
+        if place_id is not None:
+            place = self.place_repo.get(place_id)
+            if not place:
+                raise ValueError(f"Place with ID {place_id} not found")
+            review_data['place'] = place
+
+        # rating validation is handled by the Review setter, no need to touch it
+
         return self.review_repo.update(review_id, review_data)
 
     def delete_review(self, review_id):

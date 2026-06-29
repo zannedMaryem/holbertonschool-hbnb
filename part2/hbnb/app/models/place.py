@@ -47,7 +47,7 @@ class Place(BaseModel):
     @latitude.setter
     def latitude(self,latitude):
         # latitude must be a float and:  -90.0 < latitude < 90.0
-        if not isinstance(latitude, float) or latitude < -90.0 or latitude > 90.0:
+        if not isinstance(latitude, (float, int)) or latitude < -90.0 or latitude > 90.0:
             raise ValueError("The latitude must be between -90.0 and 90.0")
         self._latitude = latitude
     
@@ -58,7 +58,7 @@ class Place(BaseModel):
     @longitude.setter
     def longitude(self, longitude):
         # longitude must be a float and: -180.0 < longitude < 180.0
-        if not isinstance(longitude, float) or longitude < -180.0 or longitude > 180.0:
+        if not isinstance(longitude, (float, int)) or longitude < -180.0 or longitude > 180.0:
             raise ValueError("longitude must be between -180.0 and 180.0")
         self._longitude = longitude
 
@@ -71,8 +71,13 @@ class Place(BaseModel):
         # owner must be a valid User instance
         if not isinstance(owner, User):
             raise ValueError("owner must be a valid User instance")
+        # If this place already belongs to this owner, do nothing
+        if getattr(self, '_owner', None) is owner:
+            return
         self._owner = owner
-        owner.add_place(self) #delegate to User’s method
+        # Maintain the bidirectional reference without recursive setter calls
+        if self not in owner.places:
+            owner.places.append(self)
     
     @property
     def description(self):
@@ -83,7 +88,7 @@ class Place(BaseModel):
         # description is optional and if it's available must be a string
         if description is not None:
             if not isinstance(description, str):
-                raise ValueError("Deescription section must be a paragraph that describes your location")
+                raise ValueError("Description must be a paragraph that describes your location")
         self._description = description
 
     def add_review(self, review):
@@ -91,13 +96,15 @@ class Place(BaseModel):
         from hbnb.app.models.review import Review
         if not isinstance(review, Review):
             raise ValueError("review must be a valid Review instance")
-        self.reviews.append(review)
-        review.place = self
+        if review not in self.reviews:
+            self.reviews.append(review)
     
     def add_amenity(self, amenity):
         """Add an amenity to the place."""
         from hbnb.app.models.amenity import Amenity
         if not isinstance(amenity, Amenity):
             raise ValueError("amenity must be a valid Amenity instance")
-        self.amenities.append(amenity)
-        amenity.place = self
+        if amenity not in self.amenities:
+            self.amenities.append(amenity)
+        if self not in amenity.places:         # avoid infinite loop
+            amenity.places.append(self)

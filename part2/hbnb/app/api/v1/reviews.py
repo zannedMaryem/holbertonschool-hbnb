@@ -3,13 +3,21 @@ from hbnb.app.services import facade
 
 api = Namespace('reviews', description='Review operations')
 
-# Define the review model for input validation and documentation
+# Define the review model for input validation
 review_model = api.model('Review', {
     'text': fields.String(required=True, description='Text of the review'),
     'rating': fields.Integer(required=True, description='Rating of the place (1-5)'),
     'user_id': fields.String(required=True, description='ID of the user'),
     'place_id': fields.String(required=True, description='ID of the place')
 })
+
+# Define the review model for documentation
+output_review_model = api.model('ReviewListOutput', {
+    'id': fields.String(required=True, description='Review ID'),
+    'text': fields.String(required=True, description='Text of the review'),
+    'rating': fields.Integer(required=True, description='Rating of the place (1-5)'),
+})
+
 
 @api.route('/')
 class ReviewList(Resource):
@@ -20,7 +28,7 @@ class ReviewList(Resource):
         """Register a new review"""
         review_data = api.payload
         if not review_data:
-            return{'error': 'Invalid input data'}
+            return{'error': 'Invalid input data'}, 400
         try:
             new_review = facade.create_review(review_data)
         except ValueError as e:
@@ -32,8 +40,7 @@ class ReviewList(Resource):
             'user_id': new_review.user.id,
             'place_id': new_review.place.id
         }, 201
-
-    @api.response(200, 'List of reviews retrieved successfully')
+    @api.marshal_with(output_review_model, code=200, description='List of reviews retrieved successfully')
     def get(self):
         """Retrieve a list of all reviews"""
         reviews_list = facade.get_all_reviews()
@@ -83,7 +90,8 @@ class ReviewResource(Resource):
     @api.response(404, 'Review not found')
     def delete(self, review_id):
         """Delete a review"""
-        review = facade.delete_review(review_id)
+        review = facade.get_review(review_id)  # check existence first
         if not review:
-            return{'error': 'Review not found'}, 404
-        return{'message': 'Review deleted successfully'}, 200
+            return {'error': 'Review not found'}, 404
+        facade.delete_review(review_id)
+        return {'message': 'Review deleted successfully'}, 200

@@ -12,8 +12,18 @@ review_model = api.model('PlaceReview', {
     'rating': fields.Integer(description='Rating of the place (1-5)'),
     'user_id': fields.String(description='ID of the user')
 })
-# Define the place model for input validation and documentation
-place_model = api.model('Place', {
+#Define the place model for input
+input_place_model = api.model('Place', {
+    'title': fields.String(required=True, description='Title of the place'),
+    'description': fields.String(description='Description of the place'),
+    'price': fields.Float(required=True, description='Price per night'),
+    'latitude': fields.Float(required=True, description='Latitude of the place'),
+    'longitude': fields.Float(required=True, description='Longitude of the place'),
+    'owner_id': fields.String(required=True, description='ID of the owner')
+})
+# Define the place model for documentation
+output_place_model = api.model('PlaceOutput', {
+    'id': fields.String(required=True, description='Place ID'),
     'title': fields.String(required=True, description='Title of the place'),
     'description': fields.String(description='Description of the place'),
     'price': fields.Float(required=True, description='Price per night'),
@@ -25,9 +35,20 @@ place_model = api.model('Place', {
     'reviews': fields.List(fields.Nested(review_model), description='List of reviews')
 })
 
+place_list_model = api.model('PlaceListOutput', {
+    'id': fields.String(required=True, description='Place ID'),
+    'title': fields.String(required=True, description='Title of the place'),
+    'latitude': fields.Float(required=True, description='Latitude of the place'),
+    'longitude': fields.Float(required=True, description='Longitude of the place'),
+})
+
+add_amenity_model = api.model('AmenityAttach', {
+        'amenity_id': fields.String(required=True, description='ID of the amenity to attach')
+})
+
 @api.route('/')
 class PlaceList(Resource):
-    @api.expect(place_model, validate=True)
+    @api.expect(input_place_model, validate=True)
     @api.response(201, 'Place successfully created')
     @api.response(400, 'Invalid input data')
     def post(self):
@@ -39,6 +60,7 @@ class PlaceList(Resource):
             new_place = facade.create_place(place_data)
         except ValueError as e:
             return{'error': str(e)}, 400
+
         return {
             'id': new_place.id,
             'title': new_place.title,
@@ -46,38 +68,39 @@ class PlaceList(Resource):
             'latitude': new_place.latitude,
             'longitude': new_place.longitude,
             'owner_id': new_place.owner.id,
-            'description': new_place.description
         }, 201
 
-    @api.response(200, 'Places list retreived successfully')
+    @api.marshal_list_with(place_list_model, code=200, description='Places list retrieved successfully')
     def get(self):
         """Retrive all places"""
         places_list = facade.get_all_places()
         return [
             {
-            'id': place.id,
-            'title': place.title,
-            'latitude': place.latitude,
-            'longitude': place.longitude,   
+                'id': place.id,
+                'title': place.title,
+                'latitude': place.latitude,
+                'longitude': place.longitude,
             } for place in places_list
         ], 200
   
 @api.route('/<place_id>')
 class PlaceResources(Resource):
-    @api.response(200, 'Place details retrieved successfully')
+    @api.marshal_with(output_place_model, code=200, description='Place details retrieved successfully')
     @api.response(404, 'Place not found')
     def get(self, place_id):
         """Get place details by ID"""
         place = facade.get_place(place_id)
         if not place:
-            return{'error':'Place not found'}, 404
-        amenities_list = facade.get_amenities_by_place(place_id)
+            api.abort(404, 'Place not found')
+        amenities_list = facade.get_amenities_by_place(place_id) or []
+        reviews_list = facade.get_reviews_by_place(place_id) or []
         return {
             'id': place.id,
             'title': place.title,
             'price': place.price,
             'latitude': place.latitude,
             'longitude': place.longitude,
+            'owner_id': place.owner.id,
             'owner': {
                 'id': place.owner.id,
                 'first_name': place.owner.first_name,
@@ -90,12 +113,20 @@ class PlaceResources(Resource):
                     'id': amenity.id,
                     'name': amenity.name
                 } for amenity in amenities_list
+            ],
+            'reviews': [
+                {
+                    'id': review.id,
+                    'text': review.text,
+                    'rating': review.rating,
+                    'user_id': review.user_id
+                } for review in reviews_list
             ]
         }, 200
-    @api.expect(place_model, validate=True)
-    @api.response(200, 'Place updated successfully')
-    @api.response(404, 'Place not found')
+    @api.expect(input_place_model, validate=True)
+    @api.response(200, 'Place successfully created')
     @api.response(400, 'Invalid input data')
+    @api.response(404, 'Place not found')
     def put(self, place_id):
         """Update a place's information"""
         place_data = api.payload
@@ -131,8 +162,8 @@ class PlaceReviewList(Resource):
         place = facade.get_place(place_id)
         if not place:
             return{'error': 'Place not found'}, 404
-        reviews_list = facade.get_reviews_by_place(place_id)
-        return[
+        reviews_list = facade.get_reviews_by_place(place_id) or []
+        return [
             {
                 'id': review.id,
                 'text': review.text,
@@ -149,9 +180,32 @@ class PlaceAmenitiesList(Resource):
         place = facade.get_place(place_id)
         if not place:
             return{'error': 'Place not found'}, 404
-        amenities_list = facade.get_amenities_by_place(place_id)
-        return[
+        amenities_list = facade.get_amenities_by_place(place_id) or []
+        return [
             {
                 'name': amenity.name
             } for amenity in amenities_list
         ], 200
+
+    @api.expect(add_amenity_model, validate=True)
+    @api.response(200, 'Amenity successfully attached to place')
+    @api.response(404, 'Place or Amenity not found')
+    @api.response(400, 'Amenity already attached')
+    def post(self, place_id):
+        """Attach an existing amenity to a place"""
+        place = facade.get_place(place_id)
+        if not place:
+            return {'error': 'Place not found'}, 404
+
+        amenity_id = api.payload.get('amenity_id')
+        if not amenity_id:
+            return{'error': 'Amenity ID id required'}, 400
+        amenity = facade.get_amenity(amenity_id)
+        if not amenity:
+            return {'error': 'Amenity not found'}, 404
+
+        if amenity in place.amenities:
+            return {'error': 'Amenity already attached to this place'}, 400
+
+        facade.add_amenity_to_place(place_id, amenity_id)
+        return {'message': f'Amenity {amenity.name} attached successfully'}, 200

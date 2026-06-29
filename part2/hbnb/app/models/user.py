@@ -66,12 +66,16 @@ class User(BaseModel):
         from hbnb.app.models.place import Place
         if not isinstance(place, Place):
             raise ValueError("place must be a valid Place instnace")
-        self.places.append(place)
-        place.owner = self
+        # Only append the place once
+        if place not in self.places:
+            self.places.append(place)
+        # Ensure the place owns this user as its owner, but avoid infinite recursion
+        if place.owner is not self:
+            place.owner = self
 
     def add_review(self, review):
         from hbnb.app.models.review import Review
         if not isinstance(review, Review):
             raise TypeError("review must be a valid Review instance")
-        self.reviews.append(review)
-        review.user = self
+        if review not in self.reviews:
+            self.reviews.append(review)
