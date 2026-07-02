@@ -1,12 +1,18 @@
+
 from hbnb.app.models.base_model import BaseModel
 from email_validator import validate_email, EmailNotValidError
 
+import re
+
+
 class User(BaseModel):
-    def __init__(self, first_name, last_name, email, is_admin=False):
+    """Class that describes the user model and sets attribute requirments"""
+    def __init__(self, first_name, last_name, email, password, is_admin=False):
         super().__init__()
         self.first_name = first_name
         self.last_name = last_name
         self.email = email
+        self.password = password
         self.is_admin = is_admin
         
         self.places = []
@@ -21,7 +27,7 @@ class User(BaseModel):
         if not isinstance(first_name, str):
             raise ValueError("First name must be a string")
         if len(first_name) > 50:
-            raise ValueError("First name must be less than 50 charachters")
+            raise ValueError("First name must be less than 50 characters")
         if not first_name.strip():
             raise ValueError("First name cannot be empty")
         self._first_name = first_name
@@ -35,7 +41,7 @@ class User(BaseModel):
         if not isinstance(last_name, str):
             raise ValueError("Last name must be a string")
         if len(last_name) > 50:
-            raise ValueError("Last name must be less than 50 charachters")
+            raise ValueError("Last name must be less than 50 characters")
         if not last_name.strip():
             raise ValueError("Last name cannot be empty")
         self._last_name = last_name
@@ -51,7 +57,15 @@ class User(BaseModel):
             self._email = valid.email
         except EmailNotValidError as e:
             raise ValueError(f"Invalid email address: {str(e)}")
+
+    @property
+    def password(self):
+        return self._password
     
+    @password.setter
+    def password(self, password):
+        self.hash_password(password)
+
     @property
     def admin(self):
         return self._is_admin
@@ -79,3 +93,31 @@ class User(BaseModel):
             raise TypeError("review must be a valid Review instance")
         if review not in self.reviews:
             self.reviews.append(review)
+
+    def hash_password(self, password):
+        """Hashes the password before storing it."""
+        from hbnb.app import bcrypt   
+        self._validate_password(password)
+        self._password = bcrypt.generate_password_hash(password).decode('utf-8')    
+    
+    def verify_password(self, password):
+        """Verifies if the provided password matches the hashed password."""
+        from hbnb.app import bcrypt
+        return bcrypt.check_password_hash(self.password, password)
+
+    def _validate_password(self, password):
+        """Validates password requirments"""
+        if not isinstance(password, str):
+            raise ValueError("password must be a string")
+        if len(password) > 72:
+            raise ValueError("password too long and must be under 72 characters")
+        if len(password) < 8:
+            raise ValueError("password too short and must be over 8 characters")
+        if not re.search(r"[A-Z]", password):
+            raise ValueError("password must contain at least one uppercase letter")
+        if not re.search(r"[a-z]", password):
+            raise ValueError("password must contain at least one lowercase letter")
+        if not re.search(r"[0-9]", password):
+            raise ValueError("password must contain at least one digit")
+        if not re.search(r"[!@#$%^&*(),.?\":{}|<>]", password):
+            raise ValueError("password must contain at least one special character")

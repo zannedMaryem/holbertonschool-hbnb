@@ -24,7 +24,7 @@ class Place(BaseModel):
         if not isinstance(title, str):
             raise ValueError("The title must be a string")
         if len(title) > 100:
-            raise ValueError("The title must be under 100 charachters")
+            raise ValueError("The title must be under 100 characters")
         if not title.strip():
             raise ValueError("Title cannot be empty")
         self._title = title
@@ -36,8 +36,10 @@ class Place(BaseModel):
     @price.setter
     def price(self, price):
         # price must be a positive float
-        if not isinstance(price, (float, int)) or price < 0:
-            raise ValueError("The price per night must be a positive float")
+        if not isinstance(price, (float, int)):
+            raise ValueError("The price per night must be a float")
+        if price < 0:
+            raise ValueError("price must be positive")
         self._price = float(price)
 
     @property
@@ -47,7 +49,9 @@ class Place(BaseModel):
     @latitude.setter
     def latitude(self,latitude):
         # latitude must be a float and:  -90.0 < latitude < 90.0
-        if not isinstance(latitude, (float, int)) or latitude < -90.0 or latitude > 90.0:
+        if not isinstance(latitude, (float, int)):
+            raise ValueError("latitude must be a float or int")
+        if latitude < -90.0 or latitude > 90.0:
             raise ValueError("The latitude must be between -90.0 and 90.0")
         self._latitude = latitude
     
@@ -58,7 +62,9 @@ class Place(BaseModel):
     @longitude.setter
     def longitude(self, longitude):
         # longitude must be a float and: -180.0 < longitude < 180.0
-        if not isinstance(longitude, (float, int)) or longitude < -180.0 or longitude > 180.0:
+        if not isinstance(longitude, (float, int)):
+            raise ValueError("longitude must be a float or int")
+        if longitude < -180.0 or longitude > 180.0:
             raise ValueError("longitude must be between -180.0 and 180.0")
         self._longitude = longitude
 

@@ -8,7 +8,23 @@ api = Namespace('users', description='User operations')
 user_model = api.model('User', {
     'first_name': fields.String(required=True, description='First name of the user'),
     'last_name': fields.String(required=True, description='Last name of the user'),
-    'email': fields.String(required=True, description='Email of the user')
+    'email': fields.String(required=True, description='Email of the user'),
+    'password': fields.String(required= True, description='User password')
+})
+
+# Define user model for output documentation
+output_user_model = api.model('Output User model', {
+    'id': fields.String(required=True, description='User ID'),
+    'first_name': fields.String(required=True, description='First name of the user'),
+    'last_name': fields.String(required=True, description='Last name of the user'),
+    'email': fields.String(required=True, description='Email of the user'),
+})
+
+update_user_model = api.model('UpdateUser', {
+    'first_name': fields.String(description='First name of the user'),
+    'last_name': fields.String(description='Last name of the user'),
+    'email': fields.String(description='Email of the user'),
+    'password': fields.String(description='User password')
 })
 
 @api.route('/')
@@ -22,6 +38,7 @@ class UserList(Resource):
         user_data = api.payload
         if not user_data:
             return{'error': 'Invalid input data'}, 400
+
         # Simulate email uniqueness check (to be replaced by real validation with persistence)
         existing_user = facade.get_user_by_email(user_data['email'])
         if existing_user:
@@ -32,12 +49,10 @@ class UserList(Resource):
             return{'error': str(e)}, 400
         return {
             'id': new_user.id,
-            'first_name': new_user.first_name,
-            'last_name': new_user.last_name,
-            'email': new_user.email
+            'message': 'User successfully created'
             }, 201
 
-    @api.response(200, 'Users list retrieved successfully')
+    @api.response(200, 'Users list retrieved successfully', output_user_model)
     def get(self):
         """Get all users"""
         users_list = facade.get_all_users()
@@ -52,7 +67,7 @@ class UserList(Resource):
  
 @api.route('/<user_id>')
 class UserResource(Resource):
-    @api.response(200, 'User details retrieved successfully')
+    @api.response(200, 'User details retrieved successfully', output_user_model)
     @api.response(404, 'User not found')
     def get(self, user_id):
         """Get user details by ID"""
@@ -65,7 +80,7 @@ class UserResource(Resource):
             'last_name': user.last_name,
             'email': user.email
             }, 200
-    @api.expect(user_model)
+    @api.expect(update_user_model)
     @api.response(200, 'User details updated successfully')
     @api.response(400, 'Invalid input data')
     @api.response(404, 'User not found')
@@ -93,7 +108,7 @@ class UserResource(Resource):
 
 @api.route('/email/<email>')
 class UserEmail(Resource):
-    @api.response(200, 'User email retreived successfully')
+    @api.response(200, 'User email retreived successfully', output_user_model)
     @api.response(400, 'Invalid input data')
     @api.response(404, 'User email not found')
     def get(self, email):
